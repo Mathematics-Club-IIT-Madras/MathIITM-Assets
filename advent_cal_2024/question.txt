@@ -1,0 +1,3 @@
+<h2 class="wp-block-heading" style="line-height:1.6">Question - Day 2</h2>
+
+Pranjal has a challenge for Achintya. Let 'e' denote the non-terminating decimal expansion of a fraction (Take 1/4 as an example, its 'e' is $0.24\overline{9}$). Pranjal asks him to write the 'e' of $\frac{1}{k}$, for any natural number $k>1$. Achintya is then required to find the number of digits in the non-repeating part of 'e'. (It is 2 (24) in the case of $\frac{1}{4}$). Can you help him? What would be the number of digits in the non-repeating part of 'e' for k = $2^{1234}\times3^{2345}\times4^{3456}\times5^{4567}$
