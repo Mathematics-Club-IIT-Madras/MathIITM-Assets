@@ -1,0 +1,5 @@
+<h2 class="wp-block-heading" style="line-height:1.6">Question - Day 1</h2>
+
+Let $S$ be a non-empty finite set of positive integers satisfying :\\
+$\left(\frac{i}{j}\right) \times LCM(i,j) \in S$ $\text{    }$ $\forall\ i,j\in S$ \\
+Find the sum of the cardinalities of all possible $S$.
