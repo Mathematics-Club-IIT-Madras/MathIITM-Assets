@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Sliding Puzzle</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #000000;
+        }
+        #puzzle {
+            width: 90vw;
+            max-width: 400px;
+            height: 90vw;
+            max-height: 400px;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2px;
+        }
+        .tile {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2em;
+            background: #f2b179;
+            cursor: pointer;
+            user-select: none;
+        }
+        .empty {
+            background: white;
+            cursor: default;
+        }
+        .button-container {
+            margin: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        #message {
+            display: none;
+            margin-top: 20px;
+            font-size: 1.5em;
+        }
+        #message.correct {
+            color: green;
+        }
+        #message.incorrect {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="puzzle"></div>
+    <div class="button-container">
+        <button id="restart">Restart</button>
+        <button id="submit">Submit</button>
+    </div>
+    <div id="message"></div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const puzzle = document.getElementById('puzzle');
+            const size = 4;
+            let tiles = [];
+            const message = document.getElementById('message');
+
+            function createTiles() {
+                tiles = [];
+                for (let i = 0; i < size * size; i++) {
+                    const tile = document.createElement('div');
+                    tile.classList.add('tile');
+                    if (i === size * size - 1) {
+                        tile.classList.add('empty');
+                        tiles.push(null);
+                    } else {
+                        tile.textContent = i + 1;
+                        tiles.push(tile);
+                    }
+                }
+            }
+
+            function renderTiles() {
+                puzzle.innerHTML = '';
+                tiles.forEach(tile => {
+                    if (tile) {
+                        puzzle.appendChild(tile);
+                    } else {
+                        const emptyDiv = document.createElement('div');
+                        emptyDiv.classList.add('tile', 'empty');
+                        puzzle.appendChild(emptyDiv);
+                    }
+                });
+            }
+
+            function swapTiles(i, j) {
+                [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
+                renderTiles();
+            }
+
+            function shuffle() {
+                for (let i = 0; i < 1000; i++) {
+                    const emptyIndex = tiles.indexOf(null);
+                    const possibleMoves = [];
+                    if (emptyIndex % size > 0) possibleMoves.push(emptyIndex - 1);
+                    if (emptyIndex % size < size - 1) possibleMoves.push(emptyIndex + 1);
+                    if (emptyIndex - size >= 0) possibleMoves.push(emptyIndex - size);
+                    if (emptyIndex + size < size * size) possibleMoves.push(emptyIndex + size);
+                    const swapIndex = possibleMoves[Math.floor(Math.random() * possibleMoves.length)];
+                    swapTiles(emptyIndex, swapIndex);
+                }
+            }
+
+            function checkWinCondition() {
+                for (let i = 0; i < tiles.length - 1; i++) {
+                    if (tiles[i] && parseInt(tiles[i].textContent) !== i + 1) {
+                        return false;
+                    }
+                }
+                return tiles[tiles.length - 1] === null;
+            }
+
+            function displayMessage(isCorrect) {
+                if (isCorrect) {
+                    message.textContent = "Congratulations! You solved the puzzle!";
+                    message.className = 'correct';
+                } else {
+                    message.textContent = "Incorrect! Keep trying!";
+                    message.className = 'incorrect';
+                }
+                message.style.display = 'block';
+            }
+
+            puzzle.addEventListener('click', function (e) {
+                const tile = e.target;
+                const index = Array.from(puzzle.children).indexOf(tile);
+                const emptyIndex = tiles.indexOf(null);
+                if (Math.abs(index - emptyIndex) === 1 || Math.abs(index - emptyIndex) === size) {
+                    swapTiles(index, emptyIndex);
+                }
+            });
+
+            document.getElementById('restart').addEventListener('click', function () {
+                message.style.display = 'none';
+                createTiles();
+                shuffle();
+                renderTiles();
+            });
+
+            document.getElementById('submit').addEventListener('click', function () {
+                const isCorrect = checkWinCondition();
+                displayMessage(isCorrect);
+            });
+
+            createTiles();
+            shuffle();
+            renderTiles();
+        });
+    </script>
+</body>
+</html>
