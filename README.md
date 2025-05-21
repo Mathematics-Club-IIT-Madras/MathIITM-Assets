@@ -1,1 +1,0 @@
-# MathematicsClubIITM.github.io
